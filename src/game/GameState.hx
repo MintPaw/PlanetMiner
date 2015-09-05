@@ -43,8 +43,26 @@ class GameState extends FlxState
 			_players = new FlxTypedGroup();
 			add(_players);
 
-			for (playerDef in _playerDefs) {
+			var playerPush:Int = 2;
+			for (i in 0..._playerDefs.length) {
+				var playerDef:Dynamic = _playerDefs[i];
+
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
+
+				if (i == 0) {
+					p.x = Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * playerPush;
+				} else if (i == 1) {
+					p.x = Reg.TILE_SIZE * _tilemap.widthInTiles - Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * playerPush;
+				} else if (i == 2) {
+					p.x = Reg.TILE_SIZE * _tilemap.widthInTiles - Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * _tilemap.heightInTiles - Reg.TILE_SIZE * playerPush;
+				} else if (i == 3) {
+					p.x = Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * _tilemap.heightInTiles - Reg.TILE_SIZE * playerPush;
+				}
+
 				_players.add(p);
 			}
 		}
