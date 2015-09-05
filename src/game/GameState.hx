@@ -103,8 +103,9 @@ class GameState extends FlxState
 				r.x = p.x + p.width / 2 - r.width / 2;
 				r.y = p.y + 5 * (p.y / Reg.TILE_SIZE < _tilemap.heightInTiles / 2 ? Reg.TILE_SIZE : -Reg.TILE_SIZE);
 
-				trace(r.x, r.y);
+				add(r.text);
 				_rockets.add(r);
+				p.rocketRef = r;
 			}
 		}
 	}
@@ -116,6 +117,7 @@ class GameState extends FlxState
 		for (p in _players.members) p.canHitBlock = true;
 
 		FlxG.collide(_players, _tilemap);
+		FlxG.collide(_players, _rockets);
 		FlxG.overlap(_players, _resources, playerVResource);
 	}
 
@@ -135,6 +137,8 @@ class GameState extends FlxState
 		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
 		var res:Resource = cast(Std.is(b1, Resource) ? b1 : b2, Resource);
 
+		if (player.score >= 100) return;
+
 		var t:DText = new DText(100, "+" + res.type, 12);
 		t.alignment = FlxTextAlign.CENTER;
 		t.x = player.x + player.width / 2 - t.width / 2 + Math.random() * 40 - 20;
@@ -144,8 +148,10 @@ class GameState extends FlxState
 		FlxTween.tween(t, { y: t.y + 20 + Math.random()*10 }, .5, { ease: FlxEase.circOut });
 		FlxTween.tween(t, { alpha: 0 }, .5, { startDelay: 1 });
 
-		player.score += res.type;
+		player.addPoints(res.type);
 		res.kill();
+
+		if (player.score > 100) player.score = 100;
 	}
 
 	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
@@ -165,11 +171,10 @@ class GameState extends FlxState
 
 		if (block > DIRT) {
 			var r:Resource = new Resource(block - DIRT);
-			r.x = tileX * Reg.TILE_SIZE + r.width / 2;
-			r.y = tileY * Reg.TILE_SIZE + r.height / 2;
+			r.x = tileX * Reg.TILE_SIZE + Reg.TILE_SIZE / 2 - r.width / 2;
+			r.y = tileY * Reg.TILE_SIZE + Reg.TILE_SIZE / 2 - r.height / 2;
 			_resources.add(r);
 		}
-
 
 		_tilemap.setTile(tileX, tileY, 0, true);
 	}

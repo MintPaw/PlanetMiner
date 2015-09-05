@@ -20,14 +20,17 @@ class Player extends FlxSprite
 	public static var CONTROLLER_2:String = "controller_2";
 	public static var CONTROLLER_3:String = "controller_3";
 
-	public var type:Int;
-	public var energy:Float = 0;
 	public var controlScheme:String;
-	public var canHitBlock:Bool = true;
-	public var score:Int = 0;
 	public var bar:FlxBar;
+
+	public var type:Int = 0;
+	public var energy:Float = 0;
+	public var score:Int = 90;
+
+	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;
 	public var speedMult:Int = 1;
+	public var rocketRef:Rocket;
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -73,7 +76,6 @@ class Player extends FlxSprite
 		var down:Bool = false;
 		var left:Bool = false;
 		var right:Bool = false;
-		var shoot:Bool = false;
 		var speed:Bool = false;
 
 		{ // Update input
@@ -82,15 +84,13 @@ class Player extends FlxSprite
 				if (FlxG.keys.pressed.DOWN) down = true;
 				if (FlxG.keys.pressed.LEFT) left = true;
 				if (FlxG.keys.pressed.RIGHT) right = true;
-				if (FlxG.keys.pressed.COMMA || FlxG.keys.pressed.NUMPADONE) shoot = true;
-				if (FlxG.keys.pressed.PERIOD || FlxG.keys.pressed.NUMPADTWO) speed = true;
+				if (FlxG.keys.pressed.SLASH || FlxG.keys.pressed.NUMPADONE) speed = true;
 			} else if (controlScheme == KEYBOARD_1) {
 				if (FlxG.keys.pressed.W) up = true;
 				if (FlxG.keys.pressed.S) down = true;
 				if (FlxG.keys.pressed.A) left = true;
 				if (FlxG.keys.pressed.D) right = true;
-				if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) shoot = true;
-				if (FlxG.keys.pressed.G || FlxG.keys.pressed.L) speed = true;
+				if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) speed = true;
 			} else {
 				var pad:FlxGamepad = null;
 
@@ -148,5 +148,11 @@ class Player extends FlxSprite
 			bar.y = y + height + bar.height / 2;
 			bar.value = energy;
 		}
+	}
+
+	public function addPoints(points:Int):Void
+	{
+		score += points;
+		rocketRef.updatePoints(score);
 	}
 }
