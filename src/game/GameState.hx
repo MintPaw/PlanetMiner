@@ -7,6 +7,8 @@ import flixel.tile.FlxTilemap;
 
 class GameState extends FlxState
 {
+	public static var DIRT:Int = 1;
+
 	private var _players:FlxTypedGroup<Player>;
 	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
@@ -63,6 +65,8 @@ class GameState extends FlxState
 					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
 				}
 
+				breakBlock(p.x, p.y, false);
+
 				_players.add(p);
 			}
 		}
@@ -78,5 +82,12 @@ class GameState extends FlxState
 	{
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
+
+		if (_tilemap.getTile(tileX, tileY) == DIRT) {
+			// Break Dirt
+		}
+
+
+		_tilemap.setTile(tileX, tileY, 0, true);
 	}
 }
