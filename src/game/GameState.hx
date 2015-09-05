@@ -28,6 +28,7 @@ class GameState extends FlxState
 
 	private var _tilesToDestroy:Array<Array<Int>> = [];
 	private var _timeTillNextDestroy:Float = 0;
+	private var _ending:Bool = false;
 
 	public function new(playerDefs:Array<Dynamic>)
 	{
@@ -135,6 +136,14 @@ class GameState extends FlxState
 
 		{ // Update misc
 			for (p in _players.members) p.canHitBlock = true;
+		}
+
+		{ // Update winning
+			if (_players.countLiving() == 0 && !_ending) {
+				_ending = true;
+				for (res in _resources.members) FlxTween.tween(res, { alpha: 0 }, .5);
+				FlxTween.tween(_tilemap, { y: _tilemap.height, alpha: 25 }, 4, { ease: null });
+			}
 		}
 
 		super.update(elapsed);
