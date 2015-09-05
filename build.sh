@@ -1,0 +1,1 @@
+openfl build linux -debug -dLegacy
