@@ -22,15 +22,16 @@ class Player extends FlxSprite
 
 	public var controlScheme:String;
 	public var bar:FlxBar;
+	public var rocketRef:Rocket;
 
 	public var type:Int = 0;
 	public var energy:Float = 0;
-	public var score:Int = 0;
+	public var score:Int = 100;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;
 	public var speedMult:Int = 1;
-	public var rocketRef:Rocket;
+	public var escaped:Bool = false;
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -154,5 +155,11 @@ class Player extends FlxSprite
 	{
 		score += points;
 		rocketRef.updatePoints(score);
+	}
+
+	public override function kill():Void
+	{
+		bar.kill();
+		super.kill();
 	}
 }

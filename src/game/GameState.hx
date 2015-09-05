@@ -112,13 +112,18 @@ class GameState extends FlxState
 
 	public override function update(elapsed:Float):Void
 	{
+
+		{ // Update misc
+			for (p in _players.members) p.canHitBlock = true;
+		}
+
 		super.update(elapsed);
 
-		for (p in _players.members) p.canHitBlock = true;
-
-		FlxG.collide(_players, _tilemap);
-		FlxG.collide(_players, _rockets);
-		FlxG.overlap(_players, _resources, playerVResource);
+		{ // Update collision
+			FlxG.collide(_players, _tilemap);
+			FlxG.collide(_players, _rockets, playerVRocket);
+			FlxG.overlap(_players, _resources, playerVResource);
+		}
 	}
 
 	private function playerVTile(b1:FlxBasic, b2:FlxBasic):Void
@@ -152,6 +157,25 @@ class GameState extends FlxState
 		res.kill();
 
 		if (player.score > 100) player.score = 100;
+	}
+
+	private function playerVRocket(b1:FlxBasic, b2:FlxBasic):Void
+	{
+		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
+		var rocket:Rocket = cast(Std.is(b1, Rocket) ? b1 : b2, Rocket);
+
+		if (player.score >= 100 && rocket == player.rocketRef) {
+			player.escaped = true;
+			player.kill();
+			rocket.launch();
+			destroyPlanet();
+		}
+	}
+
+	private function destroyPlanet():Void
+	{
+		if (destroyingPlanet) return;
+		destroyingPlanet = true;
 	}
 
 	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
