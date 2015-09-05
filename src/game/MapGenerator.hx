@@ -99,10 +99,10 @@ class Map {
                     }
                 }
             }
-            trace(cur_val);
-            trace("\n");
-            trace(square_size);
-            trace("\n\n");
+            // trace(cur_val);
+            // trace("\n");
+            // trace(square_size);
+            // trace("\n\n");
             cur_val = cur_val -1;
             square_size = square_size + 1;
 

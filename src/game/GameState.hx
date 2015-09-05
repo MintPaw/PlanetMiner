@@ -14,6 +14,7 @@ class GameState extends FlxState
 	public static var DIRT:Int = 1;
 
 	private var _players:FlxTypedGroup<Player>;
+	private var _resources:FlxTypedGroup<Resource>;
 	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
 	private var _blockDurability:Array<Array<Float>>;
@@ -27,7 +28,6 @@ class GameState extends FlxState
 
 	public override function create():Void
 	{
-
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 
@@ -51,7 +51,12 @@ class GameState extends FlxState
 			}
 		}
 
-		{ // Add players
+		{ // Setup resources
+			_resources = new FlxTypedGroup();
+			add(_resources);
+		}
+
+		{ // Setup players
 			_players = new FlxTypedGroup();
 			add(_players);
 
@@ -89,6 +94,7 @@ class GameState extends FlxState
 		for (p in _players.members) p.canHitBlock = true;
 
 		FlxG.collide(_players, _tilemap);
+		FlxG.overlap(_players, _resources, playerVResource);
 	}
 
 	private function playerVTile(b1:FlxBasic, b2:FlxBasic):Void
@@ -100,6 +106,15 @@ class GameState extends FlxState
 		player.canHitBlock = false;
 
 		hitBlock(player, tile.x, tile.y, false);
+	}
+
+	private function playerVResource(b1:FlxBasic, b2:FlxBasic):Void
+	{
+		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
+		var res:Resource = cast(Std.is(b1, Resource) ? b1 : b2, Resource);
+
+		player.score += res.type;
+		res.kill();
 	}
 
 	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
@@ -115,9 +130,13 @@ class GameState extends FlxState
 	{
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
+		var block:Int = _tilemap.getTile(tileX, tileY);
 
-		if (_tilemap.getTile(tileX, tileY) == DIRT) {
-			// Break Dirt
+		if (block > DIRT) {
+			var r:Resource = new Resource(block - DIRT);
+			r.x = tileX * Reg.TILE_SIZE + r.width / 2;
+			r.y = tileY * Reg.TILE_SIZE + r.height / 2;
+			_resources.add(r);
 		}
 
 
