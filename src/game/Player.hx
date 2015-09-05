@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.id.XBox360ID;
+import flixel.util.FlxTimer;
 import flixel.ui.FlxBar;
 
 class Player extends FlxSprite
@@ -26,7 +27,7 @@ class Player extends FlxSprite
 
 	public var type:Int = 0;
 	public var energy:Float = 0;
-	public var score:Int = 0;
+	public var score:Int = 100;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;

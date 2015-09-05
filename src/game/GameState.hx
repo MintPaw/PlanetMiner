@@ -19,7 +19,7 @@ import game.MapGenerator;
 class GameState extends FlxState
 {
 	public static var DIRT:Int = 1;
-	// public static var KILL:Int = -1;
+	public static var KILL:Int = 33;
 
 	private var _dirts:Array<Int> = [1, 12, 13, 14];
 	private var _gem1:Array<Int> = [2, 15, 16, 17];
@@ -56,6 +56,7 @@ class GameState extends FlxState
 	{
 		{ // Setup misc
 			_rnd = new FlxRandom();
+			FlxG.camera.fade(0xFF000000, 2, true);
 		}
 
 		{ // Setup tilemap
@@ -80,15 +81,8 @@ class GameState extends FlxState
 			add(_backTilemap);
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
-			for (i in 0..._tilemap.totalTiles) {
-				if (_dirts.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_dirts));
-				if (_gem1.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem1));
-				if (_gem2.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem2));
-				if (_gem3.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem3));
-				if (_gem4.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem4));
-				if (_gem5.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem5));
-			}
-			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 5);
+			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 31);
+			_tilemap.setTileProperties(32, FlxObject.NONE, playerVTile);
 			add(_tilemap);
 
 			_blockDurability = [];
@@ -96,6 +90,15 @@ class GameState extends FlxState
 				_blockDurability[i] = [];
 				for (j in 0...startMap[i].length)
 					_blockDurability[i][j] = startMap[i][j] * 10;
+			}
+
+			for (i in 0..._tilemap.totalTiles) {
+				if (_dirts.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_dirts));
+				if (_gem1.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem1));
+				if (_gem2.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem2));
+				if (_gem3.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem3));
+				if (_gem4.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem4));
+				if (_gem5.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem5));
 			}
 		}
 
@@ -165,7 +168,7 @@ class GameState extends FlxState
 					if (tileToDest[0] >= 0 &&
 					    tileToDest[1] >= 0 &&
 					    tileToDest[0] < _tilemap.widthInTiles &&
-					    tileToDest[1] < _tilemap.heightInTiles) _tilemap.setTile(tileToDest[0], tileToDest[1], 0);
+					    tileToDest[1] < _tilemap.heightInTiles) _tilemap.setTile(tileToDest[0], tileToDest[1], 33);
 
 				} else _timeTillNextDestroy -= elapsed;
 			}
@@ -274,6 +277,11 @@ class GameState extends FlxState
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
 
+		if (_tilemap.getTile(tileX, tileY) == KILL) {
+			player.kill();
+			return;
+		}
+
 		_blockDurability[tileY][tileX] -= player.speedMult;
 		if (_blockDurability[tileY][tileX] <= 0) breakBlock(player, tileX, tileY, true);
 	}
@@ -284,8 +292,16 @@ class GameState extends FlxState
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
 		var block:Int = _tilemap.getTile(tileX, tileY);
 
-		if (block > DIRT) {
-			var r:Resource = new Resource(block - DIRT);
+		var resType:Int = 0;
+
+		if (_gem1.indexOf(_tilemap.getTile(Std.int(xpos), Std.int(ypos))) != -1) resType = 1;
+		if (_gem2.indexOf(_tilemap.getTile(Std.int(xpos), Std.int(ypos))) != -1) resType = 2;
+		if (_gem3.indexOf(_tilemap.getTile(Std.int(xpos), Std.int(ypos))) != -1) resType = 3;
+		if (_gem4.indexOf(_tilemap.getTile(Std.int(xpos), Std.int(ypos))) != -1) resType = 4;
+		if (_gem5.indexOf(_tilemap.getTile(Std.int(xpos), Std.int(ypos))) != -1) resType = 5;
+
+		if (resType >= 1) {
+			var r:Resource = new Resource(resType);
 			r.x = tileX * Reg.TILE_SIZE + Reg.TILE_SIZE / 2 - r.width / 2;
 			r.y = tileY * Reg.TILE_SIZE + Reg.TILE_SIZE / 2 - r.height / 2;
 			_resources.add(r);
