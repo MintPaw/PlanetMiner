@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
@@ -33,6 +34,8 @@ class GameState extends FlxState
 	private var _timeTillNextDestroy:Float = 0;
 	private var _ending:Bool = false;
 
+	private var _rnd:FlxRandom;
+
 	public function new(playerDefs:Array<Dynamic>)
 	{
 		super();
@@ -42,9 +45,14 @@ class GameState extends FlxState
 
 	public override function create():Void
 	{
+		{ // Setup misc
+			_rnd = new FlxRandom();
+		}
+
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 			_backTilemap = new FlxTilemap();
+			_starTilemap = new FlxTilemap();
 
 			var cols:Int = 80;
 			var rows:Int = 45;
@@ -53,6 +61,10 @@ class GameState extends FlxState
 			for (i in 0...startMap.length)
 				for (j in 0...startMap[i].length)
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
+
+			_starTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
+			add(_starTilemap);
+			for (i in 0..._starTilemap.totalTiles) _starTilemap.setTileByIndex(i, _rnd.getObject([8, 9, 10, 11], [1, 1, 1, 10]));
 
 			_backTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
 			add(_backTilemap);
@@ -151,6 +163,7 @@ class GameState extends FlxState
 				_ending = true;
 				for (res in _resources.members) FlxTween.tween(res, { alpha: 0 }, .5);
 				FlxTween.tween(_tilemap, { y: _tilemap.height, alpha: 25 }, 4, { ease: null });
+				FlxTween.tween(_backTilemap, { y: _backTilemap.height, alpha: 25 }, 4, { ease: null });
 
 				var newDefs:Array<Dynamic> = [];
 				for (p in _players) if (p.escaped) for (pd in _playerDefs) if (pd.type == p.type) newDefs.push(pd);
