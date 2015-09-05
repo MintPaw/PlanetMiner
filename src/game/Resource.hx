@@ -12,13 +12,10 @@ class Resource extends FlxSprite
 
 		this.type = type;
 
-		var colour:Int = 0xFF000000;
-		if (type == 1) colour = 0xFFFF0000;
-		if (type == 2) colour = 0xFF00FF00;
-		if (type == 3) colour = 0xFF0000FF;
-		if (type == 4) colour = 0xFFFF00FF;
-		if (type == 5) colour = 0xFF00FFFF;
-
-		makeGraphic(8, 8, colour);
+		if (type == 1) loadGraphic("assets/img/res/1greencrystal.png");
+		if (type == 2) loadGraphic("assets/img/res/2bluecrystal.png");
+		if (type == 3) loadGraphic("assets/img/res/3pinkcrystal.png");
+		if (type == 4) loadGraphic("assets/img/res/4redcrystal.png");
+		if (type == 5) loadGraphic("assets/img/res/5yellowcrystal.png");
 	}
 }
