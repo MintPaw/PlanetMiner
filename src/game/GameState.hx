@@ -19,19 +19,17 @@ class GameState extends FlxState
 			_tilemap = new FlxTilemap();
 
 			var startMap:String = "";
-			var rows:Int = 80;
-			var cols:Int = 45;
+			var cols:Int = 80;
+			var rows:Int = 45;
 			for (row in 0...rows) {
 				for (col in 0...cols) {
-					startMap += "0";
+					startMap += "1";
 					if (col != cols-1) startMap += ",";
 				}
 				if (row != rows-1) startMap += "\n";
 			}
 
-			trace(startMap);
-
-
+			_tilemap.loadMapFromCSV(startMap, "assets/img/tiles.png", 16, 16);
 			add(_tilemap);
 		}
 	} 
