@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tile.FlxTilemap;
+import game.MapGenerator;
 
 class GameState extends FlxState
 {
@@ -22,22 +23,21 @@ class GameState extends FlxState
 
 	public override function create():Void
 	{
+
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 
-			var startMap:String = "";
 			var cols:Int = 80;
 			var rows:Int = 45;
+			var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
 
-			for (row in 0...rows) {
-				for (col in 0...cols) {
-					startMap += "1";
-					if (col != cols-1) startMap += ",";
+			for (i in 0...startMap.length) {
+				for (j in 0...startMap[i].length) {
+					if (startMap[i][j] > 5) startMap[i][j] = 5;
 				}
-				if (row != rows-1) startMap += "\n";
 			}
 
-			_tilemap.loadMapFromCSV(startMap, "assets/img/tiles.png", 16, 16);
+			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
 			add(_tilemap);
 		}
 
@@ -74,8 +74,9 @@ class GameState extends FlxState
 
 	public override function update(elapsed:Float):Void
 	{
-
 		super.update(elapsed);
+		
+		FlxG.collide(_players, _tilemap);
 	}
 
 	public function breakBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
