@@ -136,7 +136,7 @@ class GameState extends FlxState
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
 
-		_blockDurability[tileY][tileX] -= 1;
+		_blockDurability[tileY][tileX] -= player.speedMult;
 		if (_blockDurability[tileY][tileX] <= 0) breakBlock(player, tileX, tileY, true);
 	}
 

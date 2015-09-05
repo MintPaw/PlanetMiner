@@ -27,6 +27,7 @@ class Player extends FlxSprite
 	public var score:Int = 0;
 	public var bar:FlxBar;
 	public var timeRunning:Float = 0;
+	public var speedMult:Int = 1;
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -112,10 +113,15 @@ class Player extends FlxSprite
 
 			if (energy < 100) energy += ENERGY_GAIN_RATE;
 			if (energy > 100) energy = 100;
+
+			if (timeRunning == 0) speedMult = 1;
+			if (timeRunning > 1) speedMult = 2;
+			if (timeRunning > 2) speedMult = 3;
+			if (timeRunning > 3) speedMult = 4;
 		}
 
 		{ // Update movement
-			maxVelocity.set(BASE_SPEED, BASE_SPEED);
+			maxVelocity.set(BASE_SPEED * speedMult, BASE_SPEED * speedMult);
 
 			acceleration.set();
 			if (up) acceleration.y = -maxVelocity.y * 10;
