@@ -2,7 +2,7 @@
 <project>
 	
 	<meta title="PlanetMiner" package="com.sample.planetminer" version="1.0.0" company="Company Name" />
-	<app main="Main" path="bin" file="PlanetMiner" />
+	<app main="Main" path="bin" file="planetMiner" />
 	
 	<source path="src" />
 	
