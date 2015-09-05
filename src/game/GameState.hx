@@ -25,6 +25,8 @@ class GameState extends FlxState
 	private var _rockets:FlxTypedGroup<Rocket>;
 	private var _resources:FlxTypedGroup<Resource>;	
 
+	private var _destroyingPlanet:Bool = false;
+
 	public function new(playerDefs:Array<Dynamic>)
 	{
 		super();
@@ -174,8 +176,9 @@ class GameState extends FlxState
 
 	private function destroyPlanet():Void
 	{
-		if (destroyingPlanet) return;
-		destroyingPlanet = true;
+		if (_destroyingPlanet) return;
+		_destroyingPlanet = true;
+
 	}
 
 	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
