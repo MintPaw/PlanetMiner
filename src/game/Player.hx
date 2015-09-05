@@ -2,6 +2,8 @@ package game;
 
 import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.input.gamepad.FlxGamepad;
+import flixel.input.gamepad.id.XBox360ID;
 import flixel.ui.FlxBar;
 
 class Player extends FlxSprite
@@ -11,6 +13,10 @@ class Player extends FlxSprite
 
 	public static var KEYBOARD_0:String = "keyboard_0";
 	public static var KEYBOARD_1:String = "keyboard_1";
+	public static var CONTROLLER_0:String = "controller_0";
+	public static var CONTROLLER_1:String = "controller_1";
+	public static var CONTROLLER_2:String = "controller_2";
+	public static var CONTROLLER_3:String = "controller_3";
 
 	public var type:Int;
 	public var energy:Float = 0;
@@ -78,6 +84,17 @@ class Player extends FlxSprite
 			if (FlxG.keys.pressed.D) right = true;
 			if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) shoot = true;
 			if (FlxG.keys.pressed.G || FlxG.keys.pressed.L) speed = true;
+		} else {
+			var pad:FlxGamepad = null;
+
+			if (controlScheme == CONTROLLER_0) pad = FlxG.gamepads.getByID(0);
+			if (controlScheme == CONTROLLER_1) pad = FlxG.gamepads.getByID(1);
+			if (controlScheme == CONTROLLER_2) pad = FlxG.gamepads.getByID(2);
+			if (controlScheme == CONTROLLER_3) pad = FlxG.gamepads.getByID(3);
+
+			if (pad != null && pad.connected) {
+				if (pad.getButton(XBox360ID.A).pressed) speed = true;
+			}
 		}
 
 		if (speed && energy >= 5) {
