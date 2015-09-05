@@ -6,21 +6,30 @@ import flixel.tile.FlxTilemap;
 
 class GameState extends FlxState
 {
+	private var _players:Array<Player>;
+	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
 
-	public function new()
+	public function new(playerDefs:Array<Dynamic>)
 	{
 		super();
+
+		_playerDefs = playerDefs;
 	}
 
 	public override function create():Void
 	{
+		{ // Add players
+			_players = [];
+		}
+
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 
 			var startMap:String = "";
 			var cols:Int = 80;
 			var rows:Int = 45;
+
 			for (row in 0...rows) {
 				for (col in 0...cols) {
 					startMap += "1";

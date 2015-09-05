@@ -3,6 +3,7 @@ package;
 import flixel.FlxState;
 import flixel.FlxG;
 import game.GameState;
+import game.Player;
 
 class MainState extends FlxState
 {
@@ -14,6 +15,9 @@ class MainState extends FlxState
 
 	public override function create():Void
 	{
-		FlxG.switchState(new GameState());
+		var playerDefs:Array<Dynamic> = [];
+		playerDefs[0] = { type: 0, controls: Player.KEYBOARD_0 };
+
+		FlxG.switchState(new GameState(playerDefs));
 	} 
 }
