@@ -24,6 +24,12 @@ class Player extends FlxSprite
 		if (type == 2) colour = 0xFF0000FF;
 		if (type == 3) colour = 0xFFFF00FF;
 		makeGraphic(16, 16, colour);
+
+		maxVelocity.x = 200;
+		maxVelocity.y = 200;
+
+		drag.x = maxVelocity.x * 8;
+		drag.y = maxVelocity.y * 8;
 	}
 
 	public override function update(elapsed:Float):Void
@@ -50,6 +56,12 @@ class Player extends FlxSprite
 			if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) shoot = true;
 			if (FlxG.keys.pressed.G || FlxG.keys.pressed.L) speed = true;
 		}
+
+		acceleration.set();
+		if (up) acceleration.y = -maxVelocity.y * 10;
+		if (down) acceleration.y = maxVelocity.y * 10;
+		if (left) acceleration.x = -maxVelocity.x * 10;
+		if (right) acceleration.x = maxVelocity.x * 10;
 
 		super.update(elapsed);
 	}
