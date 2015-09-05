@@ -17,11 +17,13 @@ class GameState extends FlxState
 {
 	public static var DIRT:Int = 1;
 
-	private var _players:FlxTypedGroup<Player>;
-	private var _resources:FlxTypedGroup<Resource>;
 	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
 	private var _blockDurability:Array<Array<Float>>;
+
+	private var _players:FlxTypedGroup<Player>;
+	private var _rockets:FlxTypedGroup<Rocket>;
+	private var _resources:FlxTypedGroup<Resource>;	
 
 	public function new(playerDefs:Array<Dynamic>)
 	{
@@ -88,6 +90,21 @@ class GameState extends FlxState
 
 				_players.add(p);
 				add(p.bar);
+			}
+		}
+
+		{ // Setup rockets
+			_rockets = new FlxTypedGroup();
+			add(_rockets);
+
+			for (p in _players)
+			{
+				var r:Rocket = new Rocket(p.type);
+				r.x = p.x + p.width / 2 - r.width / 2;
+				r.y = p.y + 5 * (p.y / Reg.TILE_SIZE < _tilemap.heightInTiles / 2 ? Reg.TILE_SIZE : -Reg.TILE_SIZE);
+
+				trace(r.x, r.y);
+				_rockets.add(r);
 			}
 		}
 	}

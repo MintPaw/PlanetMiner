@@ -29,8 +29,8 @@ class Map {
             for(x in 0...w){
                 //First, implement starting positions
                 //How much of the map is starting space?
-                var wcorner = 1/8*w;
-                var hcorner = 1/8*h;
+                var wcorner = 1/16*w;
+                var hcorner = 1/4*h;
 
                 if((x >= 0 && x <= wcorner) || (x >= w-wcorner && x < w)){
                     if((y >= 0 && y <= hcorner) || (y >= h-hcorner && y < h)){
@@ -210,12 +210,12 @@ class Array2D
     public static function create(w:Int, h:Int)
     {
         var a = [];
-        for (x in 0...w)
+        for (y in 0...h)
         {
-            a[x] = [];
-            for (y in 0...h)
+            a[y] = [];
+            for (x in 0...w)
             {
-                a[x][y] = 0;
+                a[y][x] = 0;
             }
         }
         return a;
