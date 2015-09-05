@@ -1,10 +1,9 @@
-package;
+package game;
 
 import flixel.FlxState;
 import flixel.FlxG;
-import game.GameState;
 
-class MainState extends FlxState
+class GameState extends FlxState
 {
 
 	public function new()
@@ -14,6 +13,6 @@ class MainState extends FlxState
 
 	public override function create():Void
 	{
-		FlxG.switchState(new GameState());
+
 	} 
 }
