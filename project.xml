@@ -4,6 +4,7 @@
 	<meta title="PlanetMiner" package="com.sample.planetminer" version="1.0.0" company="Company Name" />
 	<app main="Main" path="bin" file="planetMiner" />
 
+	<set name="SWF_VERSION" value="12" />
 	<window width="1280" height="720" />
 	
 	<source path="src" />
