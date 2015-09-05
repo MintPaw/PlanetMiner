@@ -17,6 +17,7 @@ class MainState extends FlxState
 	{
 		var playerDefs:Array<Dynamic> = [];
 		playerDefs[0] = { type: 0, controlScheme: Player.KEYBOARD_0 };
+		playerDefs[1] = { type: 1, controlScheme: Player.KEYBOARD_1 };
 
 		FlxG.switchState(new GameState(playerDefs));
 	} 

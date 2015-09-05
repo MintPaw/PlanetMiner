@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 class Player extends FlxSprite
 {
 	public static var KEYBOARD_0:String = "keyboard_0";
+	public static var KEYBOARD_1:String = "keyboard_1";
 
 	public var type:Int;
 	public var controlScheme:String;
