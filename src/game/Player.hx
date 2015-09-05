@@ -2,6 +2,7 @@ package game;
 
 import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.ui.FlxBar;
 
 class Player extends FlxSprite
 {
@@ -9,9 +10,11 @@ class Player extends FlxSprite
 	public static var KEYBOARD_1:String = "keyboard_1";
 
 	public var type:Int;
+	public var energy:Float = 100;
 	public var controlScheme:String;
 	public var canHitBlock:Bool = true;
 	public var score:Int = 0;
+	public var bar:FlxBar;
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -21,10 +24,24 @@ class Player extends FlxSprite
 		this.controlScheme = controlScheme;
 
 		var colour:Int = 0xFF000000;
-		if (type == 0) colour = 0xFFFF0000;
-		if (type == 1) colour = 0xFF00FF00;
-		if (type == 2) colour = 0xFF0000FF;
-		if (type == 3) colour = 0xFFFF00FF;
+		var barFillColour:Int = 0xFF000000;
+
+		if (type == 0) {
+			colour = 0xFFFF0000;
+			barFillColour = 0xFF660000;
+		}
+		if (type == 1) {
+			colour = 0xFF00FF00;
+			barFillColour = 0xFF006600;
+		}
+		if (type == 2)  {
+			colour = 0xFF0000FF;
+			barFillColour = 0xFF000066;
+		}
+		if (type == 3) {
+			colour = 0xFFFF00FF;
+			barFillColour = 0xFF660066;
+		}
 		makeGraphic(16, 16, colour);
 
 		maxVelocity.x = 200;
@@ -32,6 +49,9 @@ class Player extends FlxSprite
 
 		drag.x = maxVelocity.x * 8;
 		drag.y = maxVelocity.y * 8;
+
+		bar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, Std.int(width * 2), 6, null, null, 0, 100);
+		bar.createFilledBar(0xFF222222, barFillColour, true, 1);
 	}
 
 	public override function update(elapsed:Float):Void
@@ -66,5 +86,9 @@ class Player extends FlxSprite
 		if (right) acceleration.x = maxVelocity.x * 10;
 
 		super.update(elapsed);
+
+		bar.x = x + width / 2 - bar.width / 2;
+		bar.y = y + height + bar.height / 2;
+		bar.value = energy;
 	}
 }

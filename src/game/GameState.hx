@@ -87,6 +87,7 @@ class GameState extends FlxState
 				breakBlock(p, p.x, p.y, false);
 
 				_players.add(p);
+				add(p.bar);
 			}
 		}
 	}
