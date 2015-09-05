@@ -66,5 +66,17 @@ class GameState extends FlxState
 				_players.add(p);
 			}
 		}
-	} 
+	}
+
+	public override function update(elapsed:Float):Void
+	{
+
+		super.update(elapsed);
+	}
+
+	public function breakBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
+	{
+		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
+		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
+	}
 }
