@@ -1,47 +1,74 @@
 {"frames": [
 
 {
-	"filename": "4sprite1.png",
-	"frame": {"x":2,"y":19,"w":11,"h":15},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":0,"w":11,"h":15},
-	"sourceSize": {"w":16,"h":16},
-	"pivot": {"x":0.5,"y":0.5}
-},
-{
-	"filename": "4sprite2.png",
-	"frame": {"x":17,"y":2,"w":11,"h":15},
+	"filename": "stand.png",
+	"frame": {"x":2,"y":49,"w":8,"h":13},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":0,"w":11,"h":15},
+	"spriteSourceSize": {"x":4,"y":2,"w":8,"h":13},
 	"sourceSize": {"w":16,"h":16},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
-	"filename": "4sprite3.png",
-	"frame": {"x":19,"y":19,"w":11,"h":15},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":0,"w":11,"h":15},
-	"sourceSize": {"w":16,"h":16},
-	"pivot": {"x":0.5,"y":0.5}
-},
-{
-	"filename": "4sprite4.png",
-	"frame": {"x":30,"y":2,"w":11,"h":15},
+	"filename": "walkforward1.png",
+	"frame": {"x":2,"y":17,"w":9,"h":14},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":2,"y":0,"w":11,"h":15},
+	"spriteSourceSize": {"x":3,"y":2,"w":9,"h":14},
 	"sourceSize": {"w":16,"h":16},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
-	"filename": "4sprite5.png",
-	"frame": {"x":2,"y":2,"w":13,"h":15},
+	"filename": "walkforward2.png",
+	"frame": {"x":2,"y":33,"w":9,"h":14},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":1,"y":0,"w":13,"h":15},
+	"spriteSourceSize": {"x":4,"y":2,"w":9,"h":14},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "walkforward3.png",
+	"frame": {"x":2,"y":49,"w":8,"h":13},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":2,"w":8,"h":13},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "walkright1.png",
+	"frame": {"x":2,"y":94,"w":4,"h":13},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":2,"w":4,"h":13},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "walkright2.png",
+	"frame": {"x":2,"y":64,"w":7,"h":13},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":2,"w":7,"h":13},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "walkright3.png",
+	"frame": {"x":2,"y":2,"w":10,"h":13},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":10,"h":13},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "walkright4.png",
+	"frame": {"x":2,"y":79,"w":7,"h":13},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":7,"h":13},
 	"sourceSize": {"w":16,"h":16},
 	"pivot": {"x":0.5,"y":0.5}
 }],
@@ -50,8 +77,8 @@
 	"version": "1.0",
 	"image": "player.png",
 	"format": "RGBA8888",
-	"size": {"w":43,"h":32},
+	"size": {"w":14,"h":109},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:896e4016427609f4ae6e13c94612dc82:353387f138c50bffd9fc2aa58e3e1f5e:86d5339b780aedd87b35e2b7c0a7e11b$"
+	"smartupdate": "$TexturePacker:SmartUpdate:957913f5aa9a1175f49bacbab50d1d70:a7bd112f541277e09596f272e49c6b5a:86d5339b780aedd87b35e2b7c0a7e11b$"
 }
 }
