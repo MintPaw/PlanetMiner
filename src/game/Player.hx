@@ -9,9 +9,12 @@ class Player extends FlxSprite
 	public var type:Int;
 	public var controlScheme:String;
 
-	public function new()
+	public function new(type:Int, controlScheme:String)
 	{
 		super();
+
+		this.type = type;
+		this.controlScheme = controlScheme;
 
 		var colour:Int = 0xFF000000;
 		if (type == 0) colour = 0xFFFF0000;

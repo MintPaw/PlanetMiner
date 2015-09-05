@@ -20,18 +20,6 @@ class GameState extends FlxState
 
 	public override function create():Void
 	{
-		{ // Add players
-			_players = new FlxTypedGroup();
-			add(_players);
-
-			for (playerDef in _playerDefs) {
-				var p:Player = new Player();
-				p.type = playerDef.type;
-				p.controlScheme = playerDef.type;
-				_players.add(p);
-			}
-		}
-
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 
@@ -49,6 +37,16 @@ class GameState extends FlxState
 
 			_tilemap.loadMapFromCSV(startMap, "assets/img/tiles.png", 16, 16);
 			add(_tilemap);
+		}
+
+		{ // Add players
+			_players = new FlxTypedGroup();
+			add(_players);
+
+			for (playerDef in _playerDefs) {
+				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
+				_players.add(p);
+			}
 		}
 	} 
 }
