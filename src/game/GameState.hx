@@ -5,8 +5,12 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.text.FlxText;
+import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
 import flixel.tile.FlxTilemap;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import game.MapGenerator;
 
 class GameState extends FlxState
@@ -112,6 +116,15 @@ class GameState extends FlxState
 	{
 		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
 		var res:Resource = cast(Std.is(b1, Resource) ? b1 : b2, Resource);
+
+		var t:DText = new DText(100, "+" + res.type, 12);
+		t.alignment = FlxTextAlign.CENTER;
+		t.x = player.x + player.width / 2 - t.width / 2 + Math.random() * 40 - 20;
+		t.y = player.y + player.height / 2 - t.height / 2;
+		add(t);
+
+		FlxTween.tween(t, { y: t.y + 20 + Math.random()*10 }, .5, { ease: FlxEase.circOut });
+		FlxTween.tween(t, { alpha: 0 }, .5, { startDelay: 1 });
 
 		player.score += res.type;
 		res.kill();
