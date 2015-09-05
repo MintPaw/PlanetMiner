@@ -1,8 +1,11 @@
 package game;
 
 import flixel.FlxState;
+import flixel.FlxBasic;
+import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.tile.FlxTile;
 import flixel.tile.FlxTilemap;
 import game.MapGenerator;
 
@@ -38,6 +41,7 @@ class GameState extends FlxState
 			}
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
+			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 5);
 			add(_tilemap);
 		}
 
@@ -75,8 +79,21 @@ class GameState extends FlxState
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		
+
 		FlxG.collide(_players, _tilemap);
+	}
+
+	private function playerVTile(b1:FlxBasic, b2:FlxBasic):Void
+	{
+		var player:Player = cast((Std.is(b1, Player) ? b1 : b2), Player);
+		var tile:FlxTile = cast((Std.is(b1, FlxTile) ? b1 : b2), FlxTile);
+		hitBlock(tile.x, tile.y, false);
+	}
+
+	private function hitBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
+	{
+		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
+		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
 	}
 
 	public function breakBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
