@@ -19,6 +19,15 @@ import game.MapGenerator;
 class GameState extends FlxState
 {
 	public static var DIRT:Int = 1;
+	// public static var KILL:Int = -1;
+
+	private var _dirts:Array<Int> = [1, 12, 13, 14];
+	private var _gem1:Array<Int> = [2, 15, 16, 17];
+	private var _gem2:Array<Int> = [3, 18, 19, 20];
+	private var _gem3:Array<Int> = [4, 21, 22, 23];
+	private var _gem4:Array<Int> = [5, 24, 25, 26];
+	private var _gem5:Array<Int> = [6, 27, 28, 29];
+	private var _darkDirts:Array<Int> = [7, 30, 31, 32];
 
 	private var _playerDefs:Array<Dynamic>;
 	private var _backTilemap:FlxTilemap;
@@ -63,14 +72,22 @@ class GameState extends FlxState
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
 
 			_starTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
-			add(_starTilemap);
 			for (i in 0..._starTilemap.totalTiles) _starTilemap.setTileByIndex(i, _rnd.getObject([8, 9, 10, 11], [1, 1, 1, 10]));
+			add(_starTilemap);
 
 			_backTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
+			for (i in 0..._backTilemap.totalTiles) _backTilemap.setTileByIndex(i, _rnd.getObject(_darkDirts));
 			add(_backTilemap);
-			for (i in 0..._backTilemap.totalTiles) _backTilemap.setTileByIndex(i, 7);
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
+			for (i in 0..._tilemap.totalTiles) {
+				if (_dirts.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_dirts));
+				if (_gem1.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem1));
+				if (_gem2.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem2));
+				if (_gem3.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem3));
+				if (_gem4.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem4));
+				if (_gem5.indexOf(_tilemap.getTileByIndex(i)) != -1) _tilemap.setTileByIndex(i, _rnd.getObject(_gem5));
+			}
 			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 5);
 			add(_tilemap);
 

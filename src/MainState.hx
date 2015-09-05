@@ -15,6 +15,8 @@ class MainState extends FlxState
 
 	public override function create():Void
 	{
+		FlxG.camera.antialiasing = true;
+
 		var playerDefs:Array<Dynamic> = [];
 		playerDefs[0] = { type: 0, controlScheme: Player.KEYBOARD_0 };
 		playerDefs[1] = { type: 1, controlScheme: Player.KEYBOARD_1 };
