@@ -122,7 +122,7 @@ class GameState extends FlxState
 					_timeTillNextDestroy = .01;
 					var tileToDest:Array<Int> = _tilesToDestroy.shift();
 
-					if (tileToDest.x == -1 && tileToDest.y == -1) _tilesToDestroy = [];
+					if (tileToDest[0] == -1 && tileToDest[1] == -1) _tilesToDestroy = [];
 
 					if (tileToDest[0] >= 0 &&
 					    tileToDest[1] >= 0 &&
