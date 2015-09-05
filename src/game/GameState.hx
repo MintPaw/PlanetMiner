@@ -41,7 +41,7 @@ class GameState extends FlxState
 
 			for (row in 0...rows) {
 				for (col in 0...cols) {
-					startMap += "2";
+					startMap += "1";
 					if (col != cols-1) startMap += ",";
 				}
 				if (row != rows-1) startMap += "\n";
