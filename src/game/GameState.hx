@@ -12,6 +12,7 @@ import flixel.tile.FlxTile;
 import flixel.tile.FlxTilemap;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.util.FlxTimer;
 import game.MapGenerator;
 
 class GameState extends FlxState
@@ -143,6 +144,11 @@ class GameState extends FlxState
 				_ending = true;
 				for (res in _resources.members) FlxTween.tween(res, { alpha: 0 }, .5);
 				FlxTween.tween(_tilemap, { y: _tilemap.height, alpha: 25 }, 4, { ease: null });
+
+				var newDefs:Array<Dynamic> = [];
+				for (p in _players) if (p.escaped) for (pd in _playerDefs) if (pd.type == p.type) newDefs.push(pd);
+
+				new FlxTimer().start(5, function(t:FlxTimer) { FlxG.switchState(new GameState(newDefs)); } , 1);
 			}
 		}
 
