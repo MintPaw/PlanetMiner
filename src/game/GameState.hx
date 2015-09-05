@@ -2,11 +2,12 @@ package game;
 
 import flixel.FlxState;
 import flixel.FlxG;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tile.FlxTilemap;
 
 class GameState extends FlxState
 {
-	private var _players:Array<Player>;
+	private var _players:FlxTypedGroup<Player>;
 	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
 
@@ -20,12 +21,14 @@ class GameState extends FlxState
 	public override function create():Void
 	{
 		{ // Add players
-			_players = [];
+			_players = new FlxTypedGroup();
+			add(_players);
 
 			for (playerDef in _playerDefs) {
 				var p:Player = new Player();
 				p.type = playerDef.type;
 				p.controlScheme = playerDef.type;
+				_players.add(p);
 			}
 		}
 
@@ -38,7 +41,7 @@ class GameState extends FlxState
 
 			for (row in 0...rows) {
 				for (col in 0...cols) {
-					startMap += "1";
+					startMap += "2";
 					if (col != cols-1) startMap += ",";
 				}
 				if (row != rows-1) startMap += "\n";
