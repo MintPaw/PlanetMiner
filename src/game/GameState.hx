@@ -53,14 +53,14 @@ class GameState extends FlxState
 					p.x = Reg.TILE_SIZE * playerPush;
 					p.y = Reg.TILE_SIZE * playerPush;
 				} else if (i == 1) {
-					p.x = Reg.TILE_SIZE * _tilemap.widthInTiles - Reg.TILE_SIZE * playerPush;
+					p.x = Reg.TILE_SIZE * (_tilemap.widthInTiles - 1) - Reg.TILE_SIZE * playerPush;
 					p.y = Reg.TILE_SIZE * playerPush;
 				} else if (i == 2) {
-					p.x = Reg.TILE_SIZE * _tilemap.widthInTiles - Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * _tilemap.heightInTiles - Reg.TILE_SIZE * playerPush;
+					p.x = Reg.TILE_SIZE * (_tilemap.widthInTiles - 1) - Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
 				} else if (i == 3) {
 					p.x = Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * _tilemap.heightInTiles - Reg.TILE_SIZE * playerPush;
+					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
 				}
 
 				_players.add(p);
