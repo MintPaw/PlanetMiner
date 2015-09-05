@@ -5,6 +5,7 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
@@ -25,7 +26,8 @@ class GameState extends FlxState
 	private var _rockets:FlxTypedGroup<Rocket>;
 	private var _resources:FlxTypedGroup<Resource>;	
 
-	private var _destroyingPlanet:Bool = false;
+	private var _tilesToDestroy:Array<Array<Int>> = [];
+	private var _timeTillNextDestroy:Float = 0;
 
 	public function new(playerDefs:Array<Dynamic>)
 	{
@@ -114,6 +116,22 @@ class GameState extends FlxState
 
 	public override function update(elapsed:Float):Void
 	{
+		{ // Update destruction
+			if (_tilesToDestroy.length >= 1) {
+				if (_timeTillNextDestroy <= 0) {
+					_timeTillNextDestroy = .01;
+					var tileToDest:Array<Int> = _tilesToDestroy.shift();
+
+					if (tileToDest.x == -1 && tileToDest.y == -1) _tilesToDestroy = [];
+
+					if (tileToDest[0] >= 0 &&
+					    tileToDest[1] >= 0 &&
+					    tileToDest[0] < _tilemap.widthInTiles &&
+					    tileToDest[1] < _tilemap.heightInTiles) _tilemap.setTile(tileToDest[0], tileToDest[1], 0);
+
+				} else _timeTillNextDestroy -= elapsed;
+			}
+		}
 
 		{ // Update misc
 			for (p in _players.members) p.canHitBlock = true;
@@ -176,9 +194,27 @@ class GameState extends FlxState
 
 	private function destroyPlanet():Void
 	{
-		if (_destroyingPlanet) return;
-		_destroyingPlanet = true;
+		if (_tilesToDestroy.length > 1) return;
 
+		_tilesToDestroy = [];
+
+		var current:Array<Int> = [Std.int(_tilemap.widthInTiles / 2), Std.int(_tilemap.heightInTiles / 2)];
+		_tilesToDestroy.push([current[0], current[1]]);
+		_tilesToDestroy.push([current[0] + 1, current[1]]);
+
+		var dist:Int = 1;
+		for (k in 0...160) {
+			if (k % 2 == 1) dist++;
+
+			for (i in 0...dist) {
+				if (k % 4 == 0) current[1]--;
+				if (k % 4 == 1) current[0]++;
+				if (k % 4 == 2) current[1]++;
+				if (k % 4 == 3) current[0]--;
+
+				_tilesToDestroy.push([current[0], current[1]]);
+			}
+		}
 	}
 
 	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
