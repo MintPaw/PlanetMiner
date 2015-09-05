@@ -21,6 +21,12 @@ class GameState extends FlxState
 	{
 		{ // Add players
 			_players = [];
+
+			for (playerDef in _playerDefs) {
+				var p:Player = new Player();
+				p.type = playerDef.type;
+				p.controlScheme = playerDef.type;
+			}
 		}
 
 		{ // Setup tilemap

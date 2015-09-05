@@ -16,7 +16,7 @@ class MainState extends FlxState
 	public override function create():Void
 	{
 		var playerDefs:Array<Dynamic> = [];
-		playerDefs[0] = { type: 0, controls: Player.KEYBOARD_0 };
+		playerDefs[0] = { type: 0, controlScheme: Player.KEYBOARD_0 };
 
 		FlxG.switchState(new GameState(playerDefs));
 	} 
