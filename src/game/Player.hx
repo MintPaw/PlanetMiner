@@ -7,6 +7,7 @@ import flixel.ui.FlxBar;
 class Player extends FlxSprite
 {
 	private static var ENERGY_GAIN_RATE:Float = 0.1;
+	private static var BASE_SPEED:Float = 200;
 
 	public static var KEYBOARD_0:String = "keyboard_0";
 	public static var KEYBOARD_1:String = "keyboard_1";
@@ -17,6 +18,7 @@ class Player extends FlxSprite
 	public var canHitBlock:Bool = true;
 	public var score:Int = 0;
 	public var bar:FlxBar;
+	public var timeRunning:Float = 0;
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -45,9 +47,6 @@ class Player extends FlxSprite
 			barFillColour = 0xFF660066;
 		}
 		makeGraphic(16, 16, colour);
-
-		maxVelocity.x = 200;
-		maxVelocity.y = 200;
 
 		drag.x = maxVelocity.x * 8;
 		drag.y = maxVelocity.y * 8;
@@ -80,6 +79,13 @@ class Player extends FlxSprite
 			if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) shoot = true;
 			if (FlxG.keys.pressed.G || FlxG.keys.pressed.L) speed = true;
 		}
+
+		if (speed && energy >= 5) {
+			energy -= 100/60/4; // total/fps/maxRunTime
+			timeRunning += elapsed;
+		} else timeRunning = 0;
+
+		maxVelocity.set(BASE_SPEED, BASE_SPEED);
 
 		acceleration.set();
 		if (up) acceleration.y = -maxVelocity.y * 10;
