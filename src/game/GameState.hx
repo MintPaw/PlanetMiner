@@ -75,7 +75,7 @@ class GameState extends FlxState
 					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
 				}
 
-				breakBlock(p.x, p.y, false);
+				breakBlock(p, p.x, p.y, false);
 
 				_players.add(p);
 			}
@@ -86,26 +86,32 @@ class GameState extends FlxState
 	{
 		super.update(elapsed);
 
+		for (p in _players.members) p.canHitBlock = true;
+
 		FlxG.collide(_players, _tilemap);
 	}
 
 	private function playerVTile(b1:FlxBasic, b2:FlxBasic):Void
 	{
-		var player:Player = cast((Std.is(b1, Player) ? b1 : b2), Player);
-		var tile:FlxTile = cast((Std.is(b1, FlxTile) ? b1 : b2), FlxTile);
-		hitBlock(tile.x, tile.y, false);
+		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
+		var tile:FlxTile = cast(Std.is(b1, FlxTile) ? b1 : b2, FlxTile);
+
+		if (!player.canHitBlock) return;
+		player.canHitBlock = false;
+
+		hitBlock(player, tile.x, tile.y, false);
 	}
 
-	private function hitBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
+	private function hitBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
 	{
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
 
 		_blockDurability[tileY][tileX] -= 1;
-		if (_blockDurability[tileY][tileX] <= 0) breakBlock(tileX, tileY, true);
+		if (_blockDurability[tileY][tileX] <= 0) breakBlock(player, tileX, tileY, true);
 	}
 
-	public function breakBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
+	public function breakBlock(player:Player, xpos:Float, ypos:Float, isTile:Bool=true):Void
 	{
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);

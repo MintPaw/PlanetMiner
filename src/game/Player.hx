@@ -10,6 +10,7 @@ class Player extends FlxSprite
 
 	public var type:Int;
 	public var controlScheme:String;
+	public var canHitBlock:Bool = true;
 
 	public function new(type:Int, controlScheme:String)
 	{
