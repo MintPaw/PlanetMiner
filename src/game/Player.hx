@@ -6,11 +6,13 @@ import flixel.ui.FlxBar;
 
 class Player extends FlxSprite
 {
+	private static var ENERGY_GAIN_RATE:Float = 0.1;
+
 	public static var KEYBOARD_0:String = "keyboard_0";
 	public static var KEYBOARD_1:String = "keyboard_1";
 
 	public var type:Int;
-	public var energy:Float = 100;
+	public var energy:Float = 0;
 	public var controlScheme:String;
 	public var canHitBlock:Bool = true;
 	public var score:Int = 0;
@@ -84,6 +86,9 @@ class Player extends FlxSprite
 		if (down) acceleration.y = maxVelocity.y * 10;
 		if (left) acceleration.x = -maxVelocity.x * 10;
 		if (right) acceleration.x = maxVelocity.x * 10;
+
+		if (energy < 100) energy += ENERGY_GAIN_RATE;
+		if (energy > 100) energy = 100;
 
 		super.update(elapsed);
 
