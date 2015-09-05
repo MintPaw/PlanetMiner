@@ -2,12 +2,12 @@
 <project>
 	
 	<meta title="PlanetMiner" package="com.sample.planetminer" version="1.0.0" company="Company Name" />
-	<app main="Main" path="Export" file="PlanetMiner" />
+	<app main="Main" path="bin" file="PlanetMiner" />
 	
-	<source path="Source" />
+	<source path="src" />
 	
 	<haxelib name="openfl" />
 	
-	<assets path="Assets" rename="assets" />
+	<assets path="assets" />
 	
 </project>
