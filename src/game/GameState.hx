@@ -20,6 +20,8 @@ class GameState extends FlxState
 	public static var DIRT:Int = 1;
 
 	private var _playerDefs:Array<Dynamic>;
+	private var _backTilemap:FlxTilemap;
+	private var _starTilemap:FlxTilemap;
 	private var _tilemap:FlxTilemap;
 	private var _blockDurability:Array<Array<Float>>;
 
@@ -42,6 +44,7 @@ class GameState extends FlxState
 	{
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
+			_backTilemap = new FlxTilemap();
 
 			var cols:Int = 80;
 			var rows:Int = 45;
@@ -50,6 +53,10 @@ class GameState extends FlxState
 			for (i in 0...startMap.length)
 				for (j in 0...startMap[i].length)
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
+
+			_backTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
+			add(_backTilemap);
+			for (i in 0..._backTilemap.totalTiles) _backTilemap.setTileByIndex(i, 7);
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
 			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 5);
