@@ -16,6 +16,7 @@ class GameState extends FlxState
 	private var _players:FlxTypedGroup<Player>;
 	private var _playerDefs:Array<Dynamic>;
 	private var _tilemap:FlxTilemap;
+	private var _blockDurability:Array<Array<Float>>;
 
 	public function new(playerDefs:Array<Dynamic>)
 	{
@@ -34,15 +35,20 @@ class GameState extends FlxState
 			var rows:Int = 45;
 			var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
 
-			for (i in 0...startMap.length) {
-				for (j in 0...startMap[i].length) {
+			for (i in 0...startMap.length)
+				for (j in 0...startMap[i].length)
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
-				}
-			}
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
 			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 5);
 			add(_tilemap);
+
+			_blockDurability = [];
+			for (i in 0...startMap.length) {
+				_blockDurability[i] = [];
+				for (j in 0...startMap[i].length)
+					_blockDurability[i][j] = startMap[i][j] * 10;
+			}
 		}
 
 		{ // Add players
@@ -94,6 +100,9 @@ class GameState extends FlxState
 	{
 		var tileX:Int = Std.int(isTile ? xpos : xpos / Reg.TILE_SIZE);
 		var tileY:Int = Std.int(isTile ? ypos : ypos / Reg.TILE_SIZE);
+
+		_blockDurability[tileY][tileX] -= 1;
+		if (_blockDurability[tileY][tileX] <= 0) breakBlock(tileX, tileY, true);
 	}
 
 	public function breakBlock(xpos:Float, ypos:Float, isTile:Bool=true):Void
