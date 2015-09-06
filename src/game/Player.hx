@@ -82,7 +82,7 @@ class Player extends FlxSprite
 				if (FlxG.keys.pressed.DOWN) down = true;
 				if (FlxG.keys.pressed.LEFT) left = true;
 				if (FlxG.keys.pressed.RIGHT) right = true;
-				if (FlxG.keys.pressed.SLASH || FlxG.keys.pressed.NUMPADONE) speed = true;
+				if (FlxG.keys.pressed.M || FlxG.keys.pressed.NUMPADONE) speed = true;
 			} else if (controlScheme == KEYBOARD_1) {
 				if (FlxG.keys.pressed.W) up = true;
 				if (FlxG.keys.pressed.S) down = true;
