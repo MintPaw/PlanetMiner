@@ -130,9 +130,7 @@ class GameState extends FlxState
 					p.x = Reg.TILE_SIZE * playerPush;
 					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
 				}
-
-				breakBlock(p, p.x, p.y, false);
-
+				
 				_players.add(p);
 				add(p.bar);
 			}
@@ -174,6 +172,7 @@ class GameState extends FlxState
 								p.kill();
 							}
 						}
+						_backTilemap.setTile(tileToDest[0], tileToDest[1], 0);
 						_tilemap.setTile(tileToDest[0], tileToDest[1], 33);
 					}
 
