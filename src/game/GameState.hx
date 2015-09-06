@@ -9,6 +9,8 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.math.FlxRect;
 import flixel.math.FlxMath;
+import flixel.math.FlxAngle;
+import flixel.math.FlxVelocity;
 import flixel.text.FlxText;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
@@ -16,6 +18,7 @@ import flixel.tile.FlxTilemap;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
+import flixel.effects.FlxFlicker;
 import game.MapGenerator;
 
 class GameState extends FlxState
@@ -159,6 +162,7 @@ class GameState extends FlxState
 				var playerDef:Dynamic = _playerDefs[i];
 
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
+				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * 1/(2 / (Reg.currentRound / 2)));
 
 				p.x = startPoints[i].x * Reg.TILE_SIZE;
 				p.y = startPoints[i].y * Reg.TILE_SIZE;
@@ -184,6 +188,7 @@ class GameState extends FlxState
 				add(r.text);
 				_rockets.add(r);
 				p.rocketRef = r;
+				p.addPoints(0);
 			}
 		}
 	}
@@ -229,9 +234,11 @@ class GameState extends FlxState
 				var newDefs:Array<Dynamic> = [];
 				for (p in _players) if (p.escaped) for (pd in _playerDefs) if (pd.type == p.type) newDefs.push(pd);
 
+				Reg.currentRound++;
+
 				new FlxTimer().start(5, function(t:FlxTimer) {
-						if (newDefs.length > 1) FlxG.switchState(new GameState(newDefs));
-						else if (newDefs.length == 1) FlxG.switchState(new EndState(newDefs[0].type));
+						if (newDefs.length > 1) FlxG.switchState(new GameState(newDefs))
+						else if (newDefs.length == 1) FlxG.switchState(new EndState(newDefs[0].type))
 						else if (newDefs.length == 0) FlxG.switchState(new EndState(-1));
 					} , 1);
 			}
@@ -243,6 +250,7 @@ class GameState extends FlxState
 			FlxG.collide(_players, _tilemap);
 			FlxG.collide(_players, _rockets, playerVRocket);
 			FlxG.overlap(_players, _resources, playerVResource);
+			FlxG.overlap(_players, _players, playerVPlayer);
 		}
 	}
 
@@ -262,7 +270,7 @@ class GameState extends FlxState
 		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
 		var res:Resource = cast(Std.is(b1, Resource) ? b1 : b2, Resource);
 
-		if (player.score >= 100) return;
+		if (player.score >= player.neededScore) return;
 
 		var t:DText = new DText(100, "+" + res.type, 12);
 		t.alignment = FlxTextAlign.CENTER;
@@ -284,11 +292,55 @@ class GameState extends FlxState
 		var player:Player = cast(Std.is(b1, Player) ? b1 : b2, Player);
 		var rocket:Rocket = cast(Std.is(b1, Rocket) ? b1 : b2, Rocket);
 
-		if (player.score >= 100 && rocket == player.rocketRef) {
+		if (player.score >= player.neededScore && rocket == player.rocketRef) {
 			player.escaped = true;
 			player.kill();
 			rocket.launch();
 			destroyPlanet();
+		}
+	}
+
+	private function playerVPlayer(b1:FlxBasic, b2:FlxBasic):Void
+	{
+		var p1:Player = cast(b1, Player);
+		var p2:Player = cast(b2, Player);
+
+		if (p1.speedMult == 1 && p2.speedMult == 1) return;
+		if (p1.inv > 0 || p2.inv > 0) return;
+
+		var loser:Player = p1.speedMult > p2.speedMult ? p2 : p1;
+		var winner:Player = p1.speedMult > p2.speedMult ? p1 : p2;
+
+		if (p1.speedMult == p2.speedMult) loser = winner = null;
+
+		var p1v:FlxPoint = FlxVelocity.velocityFromAngle(FlxAngle.angleBetween(p1, p2), 1);
+		var p2v:FlxPoint = FlxVelocity.velocityFromAngle(FlxAngle.angleBetween(p2, p1), 1);
+
+		if (loser == null) {
+			if (p1.stunned > 0 || p2.stunned > 0) return;
+			p1.stunned = 1;
+			p2.stunned = 1;
+			p1.inv = 6;
+			p2.inv = 6;
+			FlxFlicker.flicker(p1, 6, .01, true);
+			FlxFlicker.flicker(p2, 6, .01, true);
+		} else {
+			loser.stunned = 1;
+			loser.inv = 6;
+			FlxFlicker.flicker(loser, 6, .01, true);
+			var points:Int = Math.round(loser.score * .2);
+			loser.addPoints(-points);
+			winner.addPoints(points);
+
+			var t:DText = new DText(100, "-" + points, 12);
+			t.color = 0xFFFF0000;
+			t.alignment = FlxTextAlign.CENTER;
+			t.x = loser.x + loser.width / 2 - t.width / 2 + Math.random() * 40 - 20;
+			t.y = loser.y + loser.height / 2 - t.height / 2;
+			add(t);
+
+			FlxTween.tween(t, { y: t.y + 20 + Math.random()*10 }, .5, { ease: FlxEase.bounceOut });
+			FlxTween.tween(t, { alpha: 0 }, .5, { startDelay: 1 });
 		}
 	}
 
@@ -327,7 +379,7 @@ class GameState extends FlxState
 			return;
 		}
 
-		_blockDurability[tileY][tileX] -= player.speedMult;
+		_blockDurability[tileY][tileX] -= player.speedMult * 2;
 		if (_blockDurability[tileY][tileX] <= 0) breakBlock(player, tileX, tileY, true);
 	}
 

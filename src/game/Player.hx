@@ -25,11 +25,14 @@ class Player extends FlxSprite
 	public var type:Int = 0;
 	public var energy:Float = 0;
 
-	public var score:Int = Reg.debug ? 100 : 0;
+	public var neededScore:Int;
+	public var score:Int = Reg.debug ? 0 : 0;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;
 	public var speedMult:Int = 1;
+	public var stunned:Float = 0;
+	public var inv:Float = 0;
 	public var escaped:Bool = false;
 
 	public function new(type:Int, controlScheme:String)
@@ -78,7 +81,7 @@ class Player extends FlxSprite
 		var right:Bool = false;
 		var speed:Bool = false;
 
-		{ // Update input
+		if (stunned <= 0) { // Update input
 			if (controlScheme == KEYBOARD_0) {
 				if (FlxG.keys.pressed.UP) up = true;
 				if (FlxG.keys.pressed.DOWN) down = true;
@@ -106,6 +109,8 @@ class Player extends FlxSprite
 					if (pad.pressed.A) speed = true;
 				}
 			}
+		} else {
+			stunned -= elapsed;
 		}
 
 		{ // Update energy
@@ -127,10 +132,10 @@ class Player extends FlxSprite
 			maxVelocity.set(BASE_SPEED * speedMult, BASE_SPEED * speedMult);
 
 			acceleration.set();
-			if (up) acceleration.y = -maxVelocity.y * 10;
-			if (down) acceleration.y = maxVelocity.y * 10;
-			if (left) acceleration.x = -maxVelocity.x * 10;
-			if (right) acceleration.x = maxVelocity.x * 10;
+			if (up) acceleration.y += -maxVelocity.y * 10;
+			if (down) acceleration.y += maxVelocity.y * 10;
+			if (left) acceleration.x += -maxVelocity.x * 10;
+			if (right) acceleration.x += maxVelocity.x * 10;
 		}
 
 		{ // Update animation
@@ -156,7 +161,7 @@ class Player extends FlxSprite
 	public function addPoints(points:Int):Void
 	{
 		score += points;
-		rocketRef.updatePoints(score);
+		rocketRef.updatePoints(score, neededScore);
 	}
 
 	public override function kill():Void

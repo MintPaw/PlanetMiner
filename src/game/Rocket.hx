@@ -35,19 +35,15 @@ class Rocket extends FlxSprite
 		super.update(elapsed);
 	}
 
-	public function updatePoints(score:Int):Void
+	public function updatePoints(score:Int, needed:Int):Void
 	{
-		var s:String = "";
-		if (Std.string(score).length == 1) s = "00" + score;
-		if (Std.string(score).length == 2) s = "0" + score;
-		if (Std.string(score).length == 3) s = Std.string(score);
-
-		if (score == 100) {
+		if (needed - score == 0) {
 			text.color = 0xFFFF0000;
-			s += "!!";
+			text.text = "DONE!";
+		} else {
+			text.color = 0xFFFFFFFF;
+			text.text = Std.string(needed - score) + " left";
 		}
-
-		text.text = s;
 	}
 
 	public function launch():Void

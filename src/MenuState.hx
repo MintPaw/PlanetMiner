@@ -105,6 +105,7 @@ class MenuState extends FlxState
 			_timerText.text = "Time left: " + Math.round(_timeLeft * 10) / 10;
 			if (_timeLeft > 0) _timeLeft -= elapsed;
 			if (_timeLeft <= 0) {
+				Reg.currentRound = 1;
 				FlxG.camera.fade(0xFF000000, Reg.debug ? .5 : 3, false, function():Void { FlxG.switchState(new game.GameState(_playerDefs)); });
 				_timeLeft = 0;
 			}
