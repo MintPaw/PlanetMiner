@@ -24,7 +24,8 @@ class Player extends FlxSprite
 
 	public var type:Int = 0;
 	public var energy:Float = 0;
-	public var score:Int = 100;
+
+	public var score:Int = Reg.debug ? 100 : 0;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;

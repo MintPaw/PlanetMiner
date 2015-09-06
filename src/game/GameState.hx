@@ -62,14 +62,19 @@ class GameState extends FlxState
 			FlxG.camera.fade(0xFF000000, 2, true);
 		}
 
+		var cols:Int = 80;
+		var rows:Int = 45;
+		var spawnSize:Int = 5;
+		var startPoints:Array<FlxPoint> = [new FlxPoint(spawnSize, spawnSize),
+			                                   new FlxPoint(cols - spawnSize, spawnSize),
+			                                   new FlxPoint(spawnSize, rows - spawnSize),
+			                                   new FlxPoint(cols - spawnSize, rows - spawnSize)];
+
 		{ // Setup tilemap
 			_tilemap = new FlxTilemap();
 			_backTilemap = new FlxTilemap();
 			_starTilemap = new FlxTilemap();
 			var startMap:Array<Array<Int>> = [];
-
-			var cols:Int = 80;
-			var rows:Int = 45;
 
 			var bmp:openfl.display.Bitmap = new openfl.display.Bitmap(new openfl.display.BitmapData(cols, rows));
 			bmp.bitmapData.perlinNoise(500, 500, 100, Math.round(Math.random() * 10000), true, true);
@@ -87,19 +92,25 @@ class GameState extends FlxState
 
 			maxValue -= minValue;
 
+
 			for (i in 0...startMap.length) {
 				for (j in 0...startMap[i].length) {
 					startMap[i][j] -= minValue;
 					startMap[i][j] = Math.round(FlxMath.lerp(-5, 5, startMap[i][j] / maxValue));
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
 					if (startMap[i][j] < 1) startMap[i][j] = 1;
-					_totalResources += startMap[i][j];
 				}
 			}
 
-			trace(startMap);
-			trace(_totalResources);
+			for (s in startPoints) {
+				for(xi in -spawnSize...spawnSize) {
+					for(yi in -spawnSize...spawnSize) {
+						startMap[Std.int(s.y + yi)][Std.int(s.x + xi)] = 0;
+					}
+				}
+			}
 
+			for (i in 0...startMap.length) for (j in 0...startMap[i].length) _totalResources += startMap[i][j];
 			// var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
 			// for (i in 0...startMap.length)
 				// for (j in 0...startMap[i].length)
@@ -149,19 +160,11 @@ class GameState extends FlxState
 
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
 
-				if (i == 0) {
-					p.x = Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * playerPush;
-				} else if (i == 1) {
-					p.x = Reg.TILE_SIZE * (_tilemap.widthInTiles - 1) - Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * playerPush;
-				} else if (i == 2) {
-					p.x = Reg.TILE_SIZE * (_tilemap.widthInTiles - 1) - Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
-				} else if (i == 3) {
-					p.x = Reg.TILE_SIZE * playerPush;
-					p.y = Reg.TILE_SIZE * (_tilemap.heightInTiles - 1) - Reg.TILE_SIZE * playerPush;
-				}
+				p.x = startPoints[i].x * Reg.TILE_SIZE;
+				p.y = startPoints[i].y * Reg.TILE_SIZE;
+
+				if (i == 0 || i == 1) p.y -= 3 * Reg.TILE_SIZE;
+				else p.y += 3 * Reg.TILE_SIZE;
 				
 				_players.add(p);
 				add(p.bar);
