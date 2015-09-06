@@ -49,7 +49,7 @@ class GameState extends FlxState
 
 	private var _tilesToDestroy:Array<Array<Int>> = [];
 	private var _timeTillNextDestroy:Float = 0;
-	private var _ending:Bool = false;
+	private var _ending:Float = -1;
 	private var _totalResources:Int = 0;
 
 	private var _rnd:FlxRandom;
@@ -167,7 +167,7 @@ class GameState extends FlxState
 				var playerDef:Dynamic = _playerDefs[i];
 
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
-				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * 1/(2 / (Reg.currentRound / 2)));
+				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * 1/(4 / (Reg.currentRound / 2)));
 
 				p.x = startPoints[i].x * Reg.TILE_SIZE;
 				p.y = startPoints[i].y * Reg.TILE_SIZE;
@@ -177,6 +177,7 @@ class GameState extends FlxState
 				
 				_players.add(p);
 				add(p.bar);
+				add(p.trail);
 				_emmiters.add(p.runEmitter);
 			}
 		}
@@ -233,10 +234,14 @@ class GameState extends FlxState
 		}
 
 		{ // Update winning
-			if (_players.countLiving() == 0 && !_ending) {
-				_ending = true;
+			if (_ending > 0) _ending -= elapsed;
+			if (_players.countLiving() == 0 && _ending == -1) _ending = 3;
+			if (_ending <= 0 && _ending != -1)
+			{
+				_ending = -1;
+				FlxG.camera.fade(0xFF000000, 5);
 				for (res in _resources.members) FlxTween.tween(res, { alpha: 0 }, .5);
-				FlxTween.tween(_tilemap, { y: _tilemap.height, alpha: 25 }, 4, { ease: null });
+				FlxTween.tween(_tilemap, { y: _tilemap.height }, 4, { ease: null });
 				FlxTween.tween(_backTilemap, { y: _backTilemap.height, alpha: 25 }, 4, { ease: null });
 
 				var newDefs:Array<Dynamic> = [];
@@ -292,7 +297,7 @@ class GameState extends FlxState
 		player.addPoints(res.type);
 		res.kill();
 
-		if (player.score > 100) player.score = 100;
+		if (player.score > player.neededScore) player.score = player.neededScore;
 	}
 
 	private function playerVRocket(b1:FlxBasic, b2:FlxBasic):Void
@@ -387,7 +392,7 @@ class GameState extends FlxState
 			return;
 		}
 
-		_blockDurability[tileY][tileX] -= player.speedMult * 2;
+		_blockDurability[tileY][tileX] -= player.speedMult * 3;
 		if (_blockDurability[tileY][tileX] <= 0) breakBlock(player, tileX, tileY, true);
 	}
 

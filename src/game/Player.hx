@@ -11,6 +11,7 @@ import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.util.FlxTimer;
 import flixel.ui.FlxBar;
+import flixel.addons.effects.FlxTrail;
 
 class Player extends FlxSprite
 {
@@ -29,7 +30,7 @@ class Player extends FlxSprite
 	public var energy:Float = Reg.debug ? 100 : 0;
 
 	public var neededScore:Int;
-	public var score:Int = Reg.debug ? 0 : 0;
+	public var score:Int = Reg.debug ? 999 : 0;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;
@@ -37,6 +38,7 @@ class Player extends FlxSprite
 	public var stunned:Float = 0;
 	public var inv:Float = 0;
 	public var escaped:Bool = false;
+	public var trail:FlxTrail;
 
 
 	public function new(type:Int, controlScheme:String)
@@ -54,6 +56,8 @@ class Player extends FlxSprite
 		setFacingFlip(FlxObject.RIGHT, false, false);
 		setFacingFlip(FlxObject.UP, true, false);
 		setFacingFlip(FlxObject.DOWN, false, false);
+
+		trail = new FlxTrail(this, null, 5);
 
 		runEmitter = new FlxEmitter(0, 0);
 		runEmitter.makeParticles(2, 2, 0xFFFF0000, 500);
@@ -82,6 +86,8 @@ class Player extends FlxSprite
 
 	public override function update(elapsed:Float):Void
 	{
+		if (trail.visible) trail.changeGraphic(getFlxFrameBitmapData());
+
 		runEmitter.x = x + width / 2;
 		runEmitter.y = y + height;
 
@@ -140,6 +146,7 @@ class Player extends FlxSprite
 			if (timeRunning > 0 && !runEmitter.emitting) runEmitter.start(false, 1, 999);
 			runEmitter.frequency = 1 / (speedMult * 10);
 			if (timeRunning == 0 && runEmitter.emitting) runEmitter.emitting = false;
+			trail.visible = timeRunning != 0;
 		}
 
 		{ // Update movement

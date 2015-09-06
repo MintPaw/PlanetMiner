@@ -33,12 +33,12 @@ class MenuState extends FlxState
 		_joinTiles = [];
 		_infoTexts = [];
 
-		_title = new FlxText(0, 0, FlxG.width, "GAME", 8 * 4);
+		_title = new FlxText(0, 0, FlxG.width, "Planet Miner", 8 * 4);
 		_title.alignment = "center";
 		_title.y = 100;
 		add(_title);
 
-		_subtitle = new FlxText(0, 0, FlxG.width, "Subtitle", 8 * 2);
+		_subtitle = new FlxText(0, 0, FlxG.width, "", 8 * 2);
 		_subtitle.alignment = "center";
 		_subtitle.y = _title.y + _title.height + 20;
 		add(_subtitle);
@@ -106,7 +106,7 @@ class MenuState extends FlxState
 			if (_timeLeft > 0) _timeLeft -= elapsed;
 			if (_timeLeft <= 0) {
 				Reg.currentRound = 1;
-				FlxG.camera.fade(0xFF000000, Reg.debug ? .5 : 3, false, function():Void { FlxG.switchState(new game.GameState(_playerDefs)); });
+				FlxG.camera.fade(0xFF000000, Reg.debug ? .5 : 3, false, function():Void { FlxG.switchState(new TutorialState(_playerDefs)); });
 				_timeLeft = 0;
 			}
 		}
