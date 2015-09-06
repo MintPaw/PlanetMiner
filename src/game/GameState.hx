@@ -87,8 +87,8 @@ class GameState extends FlxState
 			var bmp:openfl.display.Bitmap = new openfl.display.Bitmap(new openfl.display.BitmapData(cols, rows));
 			bmp.bitmapData.perlinNoise(500, 500, 100, Math.round(Math.random() * 10000), true, true);
 
-			var maxValue:Int = 0;
-			var minValue:Int = 9999999;
+			var maxValue:UInt = 0;
+			var minValue:UInt = 9999999;
 			for (i in 0...Std.int(bmp.height)) {
 				startMap[i] = [];
 				for (j in 0...Std.int(bmp.width)) {
