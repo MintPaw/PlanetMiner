@@ -167,7 +167,7 @@ class GameState extends FlxState
 				var playerDef:Dynamic = _playerDefs[i];
 
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
-				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * 1/(4 / (Reg.currentRound / 2)));
+				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * (4 / (Reg.currentRound / 2)));
 
 				p.x = startPoints[i].x * Reg.TILE_SIZE;
 				p.y = startPoints[i].y * Reg.TILE_SIZE;
