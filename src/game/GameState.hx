@@ -7,6 +7,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
+import flixel.math.FlxRect;
 import flixel.text.FlxText;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
@@ -81,8 +82,7 @@ class GameState extends FlxState
 			add(_backTilemap);
 
 			_tilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
-			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 31);
-			_tilemap.setTileProperties(32, FlxObject.NONE, playerVTile);
+			_tilemap.setTileProperties(1, FlxObject.ANY, playerVTile, null, 33);
 			add(_tilemap);
 
 			_blockDurability = [];
@@ -168,7 +168,14 @@ class GameState extends FlxState
 					if (tileToDest[0] >= 0 &&
 					    tileToDest[1] >= 0 &&
 					    tileToDest[0] < _tilemap.widthInTiles &&
-					    tileToDest[1] < _tilemap.heightInTiles) _tilemap.setTile(tileToDest[0], tileToDest[1], 33);
+					    tileToDest[1] < _tilemap.heightInTiles) {
+						for (p in _players) {
+							if (p.getMidpoint().inFlxRect(new FlxRect(tileToDest[0] * Reg.TILE_SIZE, tileToDest[1] * Reg.TILE_SIZE, Reg.TILE_SIZE, Reg.TILE_SIZE))) {
+								p.kill();
+							}
+						}
+						_tilemap.setTile(tileToDest[0], tileToDest[1], 33);
+					}
 
 				} else _timeTillNextDestroy -= elapsed;
 			}
