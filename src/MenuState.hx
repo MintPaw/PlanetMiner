@@ -7,6 +7,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.input.gamepad.FlxGamepad;
+import flixel.input.gamepad.FlxGamepadInputID;
 import game.GameState;
 import game.Player;
 
@@ -96,7 +97,7 @@ class MenuState extends FlxState
 				var pad:FlxGamepad = FlxG.gamepads.getByID(padNumber);
 				if (pad == null) continue;
 
-				// if (pad.justPressed(XboxButtonID.A)) addPlayer("controller_" + padNumber);
+				if (pad.justPressed.A) addPlayer("controller_" + padNumber);
 			}
 		}
 
