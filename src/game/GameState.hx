@@ -8,6 +8,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.math.FlxRect;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.tile.FlxTile;
@@ -43,6 +44,7 @@ class GameState extends FlxState
 	private var _tilesToDestroy:Array<Array<Int>> = [];
 	private var _timeTillNextDestroy:Float = 0;
 	private var _ending:Bool = false;
+	private var _totalResources:Int = 0;
 
 	private var _rnd:FlxRandom;
 
@@ -64,14 +66,44 @@ class GameState extends FlxState
 			_tilemap = new FlxTilemap();
 			_backTilemap = new FlxTilemap();
 			_starTilemap = new FlxTilemap();
+			var startMap:Array<Array<Int>> = [];
 
 			var cols:Int = 80;
 			var rows:Int = 45;
-			var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
 
-			for (i in 0...startMap.length)
-				for (j in 0...startMap[i].length)
+			var bmp:openfl.display.Bitmap = new openfl.display.Bitmap(new openfl.display.BitmapData(cols, rows));
+			bmp.bitmapData.perlinNoise(500, 500, 100, Math.round(Math.random() * 10000), true, true);
+
+			var maxValue:Int = 0;
+			var minValue:Int = 9999999;
+			for (i in 0...Std.int(bmp.height)) {
+				startMap[i] = [];
+				for (j in 0...Std.int(bmp.width)) {
+					startMap[i][j] = bmp.bitmapData.getPixel(j, i);
+					if (bmp.bitmapData.getPixel(j, i) > maxValue) maxValue = startMap[i][j];
+					if (bmp.bitmapData.getPixel(j, i) < minValue) minValue = startMap[i][j];
+				}
+			}
+
+			maxValue -= minValue;
+
+			for (i in 0...startMap.length) {
+				for (j in 0...startMap[i].length) {
+					startMap[i][j] -= minValue;
+					startMap[i][j] = Math.round(FlxMath.lerp(-5, 5, startMap[i][j] / maxValue));
 					if (startMap[i][j] > 5) startMap[i][j] = 5;
+					if (startMap[i][j] < 1) startMap[i][j] = 1;
+					_totalResources += startMap[i][j];
+				}
+			}
+
+			trace(startMap);
+			trace(_totalResources);
+
+			// var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
+			// for (i in 0...startMap.length)
+				// for (j in 0...startMap[i].length)
+					// if (startMap[i][j] > 5) startMap[i][j] = 5;
 
 			_starTilemap.loadMapFrom2DArray(startMap, "assets/img/tiles.png", 16, 16);
 			for (i in 0..._starTilemap.totalTiles) _starTilemap.setTileByIndex(i, _rnd.getObject([8, 9, 10, 11], [1, 1, 1, 10]));

@@ -130,6 +130,10 @@ class MenuState extends FlxState
 
 		_playerDefs.push( { type: _playerDefs.length, controlScheme: controlScheme } );
 
-		if (_playerDefs.length >= 2) _timeLeft = 10;
+		#if debug
+			if (_playerDefs.length >= 2) _timeLeft = 1;
+		#else
+			if (_playerDefs.length >= 2) _timeLeft = 10;
+		#end
 	}
 }
