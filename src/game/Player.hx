@@ -4,8 +4,9 @@ import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.input.FlxInput;
 import flixel.input.gamepad.FlxGamepad;
-import flixel.input.gamepad.id.XBox360ID;
+import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.util.FlxTimer;
 import flixel.ui.FlxBar;
 
@@ -93,7 +94,15 @@ class Player extends FlxSprite
 				var pad:FlxGamepad = FlxG.gamepads.getByID(Std.parseInt(controlScheme.charAt(controlScheme.length - 1)));
 
 				if (pad != null && pad.connected) {
-					if (pad.getButton(XBox360ID.A).pressed) speed = true;
+					if (pad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) < -.15) left = true; 
+					if (pad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) > .15) right = true; 
+					if (pad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) < -.15) up = true; 
+					if (pad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) < -.15) left = true; 
+					// if (pad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) < -.15 || pad.checkStatus(FlxGamepadInputID.DPAD_LEFT, FlxInputState.PRESSED)) left = true; 
+					// if (pad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) > .15 || pad.checkStatus(FlxGamepadInputID.DPAD_RIGHT, FlxInputState.PRESSED)) right = true; 
+					// if (pad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) < -.15 || pad.checkStatus(FlxGamepadInputID.DPAD_UP, FlxInputState.PRESSED)) up = true; 
+					// if (pad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) > .15 || pad.checkStatus(FlxGamepadInputID.DPAD_DOWN, FlxInputState.PRESSED)) down = true; 
+					if (pad.pressed.A) speed = true;
 				}
 			}
 		}
