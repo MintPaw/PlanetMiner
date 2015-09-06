@@ -3,6 +3,8 @@ package game;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.FlxG;
+import flixel.effects.particles.FlxEmitter;
+import flixel.effects.particles.FlxParticle;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.input.FlxInput;
 import flixel.input.gamepad.FlxGamepad;
@@ -20,6 +22,7 @@ class Player extends FlxSprite
 
 	public var controlScheme:String;
 	public var bar:FlxBar;
+	public var runEmitter:FlxEmitter;
 	public var rocketRef:Rocket;
 
 	public var type:Int = 0;
@@ -34,6 +37,7 @@ class Player extends FlxSprite
 	public var stunned:Float = 0;
 	public var inv:Float = 0;
 	public var escaped:Bool = false;
+
 
 	public function new(type:Int, controlScheme:String)
 	{
@@ -50,6 +54,10 @@ class Player extends FlxSprite
 		setFacingFlip(FlxObject.RIGHT, false, false);
 		setFacingFlip(FlxObject.UP, true, false);
 		setFacingFlip(FlxObject.DOWN, false, false);
+
+		// var runPart = new 
+		runEmitter = new FlxEmitter(0, 0, 0);
+		// runEmitter.makeParticles(1, 1, 
 
 		var barFillColour:Int = 0xFF000000;
 
