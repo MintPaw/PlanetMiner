@@ -16,10 +16,6 @@ class Player extends FlxSprite
 
 	public static var KEYBOARD_0:String = "keyboard_0";
 	public static var KEYBOARD_1:String = "keyboard_1";
-	public static var CONTROLLER_0:String = "controller_0";
-	public static var CONTROLLER_1:String = "controller_1";
-	public static var CONTROLLER_2:String = "controller_2";
-	public static var CONTROLLER_3:String = "controller_3";
 
 	public var controlScheme:String;
 	public var bar:FlxBar;
@@ -94,12 +90,7 @@ class Player extends FlxSprite
 				if (FlxG.keys.pressed.D) right = true;
 				if (FlxG.keys.pressed.F || FlxG.keys.pressed.K) speed = true;
 			} else {
-				var pad:FlxGamepad = null;
-
-				if (controlScheme == CONTROLLER_0) pad = FlxG.gamepads.getByID(0);
-				if (controlScheme == CONTROLLER_1) pad = FlxG.gamepads.getByID(1);
-				if (controlScheme == CONTROLLER_2) pad = FlxG.gamepads.getByID(2);
-				if (controlScheme == CONTROLLER_3) pad = FlxG.gamepads.getByID(3);
+				var pad:FlxGamepad = FlxG.gamepads.getByID(Std.parseInt(controlScheme.charAt(controlScheme.length - 1)));
 
 				if (pad != null && pad.connected) {
 					if (pad.getButton(XBox360ID.A).pressed) speed = true;

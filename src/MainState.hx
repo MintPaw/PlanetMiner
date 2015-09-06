@@ -23,6 +23,6 @@ class MainState extends FlxState
 		// playerDefs[2] = { type: 2, controlScheme: Player.CONTROLLER_0 };
 		// playerDefs[3] = { type: 3, controlScheme: Player.CONTROLLER_1 };
 
-		FlxG.switchState(new GameState(playerDefs));
+		FlxG.switchState(new MenuState());
 	} 
 }
