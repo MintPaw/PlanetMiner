@@ -44,7 +44,8 @@ class GameState extends FlxState
 
 	private var _players:FlxTypedGroup<Player>;
 	private var _rockets:FlxTypedGroup<Rocket>;
-	private var _resources:FlxTypedGroup<Resource>;	
+	private var _resources:FlxTypedGroup<Resource>;
+	private var _emmiters:FlxTypedGroup<FlxEmitter>;
 
 	private var _tilesToDestroy:Array<Array<Int>> = [];
 	private var _timeTillNextDestroy:Float = 0;
@@ -65,6 +66,8 @@ class GameState extends FlxState
 		{ // Setup misc
 			_rnd = new FlxRandom();
 			FlxG.camera.fade(0xFF000000, 2, true);
+
+			_emmiters = new FlxTypedGroup();
 		}
 
 		var cols:Int = 80;
@@ -174,6 +177,7 @@ class GameState extends FlxState
 				
 				_players.add(p);
 				add(p.bar);
+				_emmiters.add(p.runEmitter);
 			}
 		}
 
@@ -193,6 +197,8 @@ class GameState extends FlxState
 				p.addPoints(0);
 			}
 		}
+
+		add(_emmiters);
 	}
 
 	public override function update(elapsed:Float):Void

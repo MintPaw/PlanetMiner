@@ -26,7 +26,7 @@ class Player extends FlxSprite
 	public var rocketRef:Rocket;
 
 	public var type:Int = 0;
-	public var energy:Float = 0;
+	public var energy:Float = Reg.debug ? 100 : 0;
 
 	public var neededScore:Int;
 	public var score:Int = Reg.debug ? 0 : 0;
@@ -55,9 +55,8 @@ class Player extends FlxSprite
 		setFacingFlip(FlxObject.UP, true, false);
 		setFacingFlip(FlxObject.DOWN, false, false);
 
-		// var runPart = new 
-		runEmitter = new FlxEmitter(0, 0, 0);
-		// runEmitter.makeParticles(1, 1, 
+		runEmitter = new FlxEmitter(0, 0);
+		runEmitter.makeParticles(2, 2, 0xFFFF0000, 500);
 
 		var barFillColour:Int = 0xFF000000;
 
@@ -83,6 +82,9 @@ class Player extends FlxSprite
 
 	public override function update(elapsed:Float):Void
 	{
+		runEmitter.x = x + width / 2;
+		runEmitter.y = y + height;
+
 		var up:Bool = false;
 		var down:Bool = false;
 		var left:Bool = false;
@@ -134,6 +136,10 @@ class Player extends FlxSprite
 			if (timeRunning > 1) speedMult = 2;
 			if (timeRunning > 2) speedMult = 3;
 			if (timeRunning > 3) speedMult = 4;
+
+			if (timeRunning > 0 && !runEmitter.emitting) runEmitter.start(false, 1, 999);
+			runEmitter.frequency = 1 / (speedMult * 10);
+			if (timeRunning == 0 && runEmitter.emitting) runEmitter.emitting = false;
 		}
 
 		{ // Update movement
