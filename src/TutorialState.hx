@@ -40,8 +40,8 @@ class TutorialState extends FlxState
 		FlxG.camera.fade(0xFF000000, .5, true, null, true);
 		_tut.loadGraphic("assets/img/tut/" + _tutNum + ".png");
 
-		new FlxTimer().start(8, function(t:FlxTimer) { FlxG.camera.fade(0xFF000000, .5, false); });
-		new FlxTimer().start(8.5, function(t:FlxTimer) { next(); });
+		new FlxTimer().start(Reg.debug ? 1 : 8, function(t:FlxTimer) { FlxG.camera.fade(0xFF000000, .5, false); });
+		new FlxTimer().start(Reg.debug ? 1.5 : 8.5, function(t:FlxTimer) { next(); });
 	}
 
 }

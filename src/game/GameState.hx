@@ -118,7 +118,9 @@ class GameState extends FlxState
 				}
 			}
 
-			for (i in 0...startMap.length) for (j in 0...startMap[i].length) _totalResources += startMap[i][j];
+			for (i in 0...startMap.length) for (j in 0...startMap[i].length) _totalResources += startMap[i][j] - 1;
+
+			_totalResources = Std.int(_totalResources / 3 + Reg.currentRound * 30);
 			// var startMap:Array<Array<Int>> = Map.gen(cols, rows, 2, 9, 7);
 			// for (i in 0...startMap.length)
 				// for (j in 0...startMap[i].length)
@@ -167,7 +169,8 @@ class GameState extends FlxState
 				var playerDef:Dynamic = _playerDefs[i];
 
 				var p:Player = new Player(playerDef.type, playerDef.controlScheme);
-				p.neededScore = Math.ceil(_totalResources / _playerDefs.length * (4 / (Reg.currentRound / 2)));
+				p.score = 0;
+				p.neededScore = Std.int(_totalResources / _playerDefs.length);
 
 				p.x = startPoints[i].x * Reg.TILE_SIZE;
 				p.y = startPoints[i].y * Reg.TILE_SIZE;

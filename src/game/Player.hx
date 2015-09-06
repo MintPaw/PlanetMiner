@@ -30,7 +30,7 @@ class Player extends FlxSprite
 	public var energy:Float = Reg.debug ? 100 : 0;
 
 	public var neededScore:Int;
-	public var score:Int = Reg.debug ? 999 : 0;
+	public var score:Int = Reg.debug ? 0 : 0;
 
 	public var canHitBlock:Bool = true;
 	public var timeRunning:Float = 0;
@@ -182,6 +182,7 @@ class Player extends FlxSprite
 	public function addPoints(points:Int):Void
 	{
 		score += points;
+		trace(score, neededScore);
 		rocketRef.updatePoints(score, neededScore);
 	}
 
