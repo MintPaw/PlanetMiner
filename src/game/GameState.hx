@@ -195,7 +195,11 @@ class GameState extends FlxState
 				var newDefs:Array<Dynamic> = [];
 				for (p in _players) if (p.escaped) for (pd in _playerDefs) if (pd.type == p.type) newDefs.push(pd);
 
-				new FlxTimer().start(5, function(t:FlxTimer) { FlxG.switchState(new GameState(newDefs)); } , 1);
+				new FlxTimer().start(5, function(t:FlxTimer) {
+						if (newDefs.length > 1) FlxG.switchState(new GameState(newDefs));
+						else if (newDefs.length == 1) FlxG.switchState(new EndState(newDefs[0].type));
+						else if (newDefs.length == 0) FlxG.switchState(new EndState(-1));
+					} , 1);
 			}
 		}
 
